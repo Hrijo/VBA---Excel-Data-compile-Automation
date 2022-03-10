@@ -1,0 +1,191 @@
+# Roto , Paint and Matchmove are the sheets names used for this example
+# Dashboard data is the worksheet that will be used as the data source for the pivot tables
+# 2 pivot tables are built on the same data source and both are updated on a click of button provided as UI element in the excel sheet
+
+
+
+Sub copy_data()
+Worksheets("Dashboard Data").Visible = True
+Worksheets("Dashboard Data").Activate
+last_row = ActiveSheet.UsedRange.Rows.Count
+
+'Deleting Previous Data
+
+Range("A3:A3" & last_row).Select
+Selection.EntireRow.Delete
+
+'Copying Roto data
+Worksheets("DATABASE_ROTO").Visible = True
+Worksheets("DATABASE_ROTO").Activate
+If ActiveSheet.AutoFilterMode Then
+ActiveSheet.AutoFilterMode = False
+End If
+Application.CutCopyMode = False
+last_row = ActiveSheet.UsedRange.Rows.Count
+Range("A4:S" & last_row).Copy
+
+'Pasting Roto Data
+Worksheets("Dashboard Data").Activate
+Range("A3").PasteSpecial Paste:=xlPasteValues
+Application.CutCopyMode = False
+
+'Copying Roto data1
+Worksheets("DATABASE_ROTO").Activate
+Application.CutCopyMode = False
+Range("AL4:AL" & last_row).Copy
+
+'Pasting Roto Data1
+Worksheets("Dashboard Data").Activate
+Range("T3").PasteSpecial Paste:=xlPasteValues
+Application.CutCopyMode = False
+
+
+' ******* Copying Paint Data ********
+
+'Copying Paint Data
+Worksheets("DATABASE_PAINT").Visible = True
+Worksheets("DATABASE_PAINT").Activate
+If ActiveSheet.AutoFilterMode Then
+ActiveSheet.AutoFilterMode = False
+End If
+last_row = ActiveSheet.UsedRange.Rows.Count
+'MsgBox (last_row)
+Range("A4:S" & last_row).Copy
+
+
+'Pasting Paint Data
+Worksheets("Dashboard Data").Activate
+last_row1 = ActiveSheet.UsedRange.Rows.Count
+Range("A" & last_row1 + 1).PasteSpecial Paste:=xlPasteValues
+Application.CutCopyMode = False
+
+
+
+Worksheets("DATABASE_PAINT").Visible = True
+Worksheets("DATABASE_PAINT").Activate
+Range("AL4:AL" & last_row).Copy
+
+
+Worksheets("Dashboard Data").Activate
+Range("T" & last_row1 + 1).PasteSpecial Paste:=xlPasteValues
+Application.CutCopyMode = False
+
+
+
+' ******** Copying Matchmove Data P1 ********
+Worksheets("DATABASE_MATCHMOVE").Visible = True
+Worksheets("Database_MATCHMOVE").Activate
+If ActiveSheet.AutoFilterMode Then
+ActiveSheet.AutoFilterMode = False
+End If
+last_row2 = ActiveSheet.UsedRange.Rows.Count
+Range("A4:C" & last_row2).Copy
+
+'Pasting Mactmove Data P1
+Worksheets("Dashboard Data").Activate
+last_row1 = ActiveSheet.UsedRange.Rows.Count
+Range("A" & last_row1 + 1).PasteSpecial Paste:=xlPasteValues
+Application.CutCopyMode = False
+
+
+'Copying Matchmove Data P2
+Worksheets("Database_MATCHMOVE").Activate
+last_row2 = ActiveSheet.UsedRange.Rows.Count
+Range("E4:T" & last_row2).Copy
+
+
+'Pasting Mactmove Data P2
+Worksheets("Dashboard Data").Activate
+'last_row1 = ActiveSheet.UsedRange.Rows.Count
+Range("D" & last_row1 + 1).PasteSpecial Paste:=xlPasteValues
+Application.CutCopyMode = False
+
+
+'Copying Matchmove Data P2
+Worksheets("Database_MATCHMOVE").Activate
+last_row2 = ActiveSheet.UsedRange.Rows.Count
+Range("AL4:AL" & last_row2).Copy
+
+
+'Pasting Mactmove Data P2
+Worksheets("Dashboard Data").Activate
+'last_row1 = ActiveSheet.UsedRange.Rows.Count
+Range("T" & last_row1 + 1).PasteSpecial Paste:=xlPasteValues
+Application.CutCopyMode = False
+
+
+
+
+
+'Dragging All the calculations
+last_row2 = ActiveSheet.UsedRange.Rows.Count
+Range("U2:AD2").Select
+Selection.AutoFill Destination:=Range("U2:AD" & last_row2), Type:=xlFillDefault
+
+Range("A2").Select
+Selection.EntireRow.Delete
+
+
+'Refreshing Pivot 1
+Dim pt As PivotTable
+Dim pc As PivotCache
+Dim source_data1 As Range
+
+
+ 
+
+ lstrow = Cells(Rows.Count, 1).End(xlUp).Row
+ lstcol = Cells(1, Columns.Count).End(xlToLeft).Column
+ 
+
+ Set source_data1 = Range(Cells(1, 1), Cells(lstrow, lstcol))
+ Set pc = ThisWorkbook.PivotCaches.Create(xlDatabase, SourceData:=source_data1)
+ Set pt = Worksheets("VFX Dashboard").PivotTables("PivotTable2")
+
+
+pt.ChangePivotCache pc
+
+
+'Refreshing Pivot 2
+
+Dim pt1 As PivotTable
+Dim pc1 As PivotCache
+Dim source_data2 As Range
+
+
+ 
+
+ lstrow1 = Cells(Rows.Count, 1).End(xlUp).Row
+ lstcol1 = Cells(1, Columns.Count).End(xlToLeft).Column
+ 
+
+ Set source_data2 = Range(Cells(1, 1), Cells(lstrow1, lstcol1))
+ Set pc1 = ThisWorkbook.PivotCaches.Create(xlDatabase, SourceData:=source_data2)
+ Set pt1 = Worksheets("DUESTATUSPIVOT").PivotTables("PivotTable3")
+
+
+pt1.ChangePivotCache pc1
+
+
+
+
+'Hidding The unnessary Sheets
+Worksheets("Dashboard Data").Visible = False
+Worksheets("DATABASE_ROTO").Activate
+Range("A3:AO3").AutoFilter
+
+Worksheets("DATABASE_PAINT").Activate
+Range("A3:AO3").AutoFilter
+
+Worksheets("DATABASE_MATCHMOVE").Activate
+Range("A3:AO3").AutoFilter
+
+
+Worksheets("VFX Dashboard").Activate
+
+
+
+
+
+
+End Sub
