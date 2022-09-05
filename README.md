@@ -1,5 +1,3 @@
-### VBA :Excel(Dashboard)-Data-compile-Automation
-
 # Report Runner - VBA ETL
 A local vba to create a report, which utilises a system data dump as the raw data
 https://youtu.be/8rLCudGSkuY
